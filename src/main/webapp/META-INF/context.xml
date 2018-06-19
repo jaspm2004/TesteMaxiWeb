@@ -1,2 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context path="/maxiapp"/>
+<Context path="/maxiapp">
+  <Resource auth="Container" 
+            name="jdbc/maxipagodb"   
+            type="javax.sql.DataSource"            
+            driverClassName="com.mysql.cj.jdbc.Driver" 
+            url="put your DB connection URL here" 
+            username="put your user name here"  
+            password="put your password here"              
+  />
+</Context>

@@ -4,8 +4,11 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 
 /**
  *
@@ -19,15 +22,14 @@ public class ConnectionFactory {
     @PostConstruct
     public void createConnection() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            String user = "****";
-            String password = "****";
-            String connURL = "****";
-            connection = DriverManager.getConnection(connURL, user, password);
+            Context initCtx = new InitialContext();
+            Context envCtx = (Context) initCtx.lookup("java:comp/env");
+            DataSource ds = (DataSource) envCtx.lookup("jdbc/maxipagodb");
+            connection = ds.getConnection();
         } catch (SQLException ex) {
             System.out.println("SQLException: " + ex.getMessage());
-        } catch (ClassNotFoundException ex) {
-            System.out.println("ClassNotFoundException: " + ex.getMessage());
+        } catch (NamingException ex) {
+            System.out.println("NamingException: " + ex.getMessage());
         }
     }
 
