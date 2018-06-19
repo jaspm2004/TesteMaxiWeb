@@ -1,14 +1,25 @@
 package com.maxipago.teste.dto;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  *
  * @author Jose San Pedro
  */
+@XmlRootElement
 public class CityDTO {
 
+    @XmlElement
     private Long id;
+    
+    @XmlElement
     private String name;
+    
+    @XmlElement
     private Double latitude;
+    
+    @XmlElement
     private Double longitude;
 
     public CityDTO() {

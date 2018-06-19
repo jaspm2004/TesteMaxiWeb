@@ -1,9 +1,9 @@
 package com.maxipago.teste.services;
 
-import com.maxipago.teste.dto.CityDistanceDTO;
 import com.maxipago.teste.dao.CityDAO;
+import com.maxipago.teste.dto.CityContainerDTO;
 import com.maxipago.teste.dto.CityDTO;
-import java.util.ArrayList;
+import com.maxipago.teste.dto.CityDistanceContainerDTO;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -19,19 +19,21 @@ public class CityService {
     @Inject
     DistanceCalculator distanceCalc;
     
-    public List<CityDTO> findAll() {
-        return cityDAO.findAll();
+    public CityContainerDTO findAll() {
+        CityContainerDTO container = new CityContainerDTO();
+        container.setCities(cityDAO.findAll());
+        
+        return container;
     }
     
     public CityDTO getCity() {
         return new CityDTO(1L, "Sao Paulo", 123D, 456D);
     }
     
-    public List<CityDistanceDTO> getDistances(String unit) {
+    public CityDistanceContainerDTO getDistances(String unit) {
         List<CityDTO> cities = cityDAO.findAll();
         CityDTO cityI, cityJ;
         double distance;
-        List<CityDistanceDTO> distances = new ArrayList<>();
         String nUnit = "K";
         
         switch(unit) {
@@ -42,6 +44,8 @@ public class CityService {
                 nUnit = "M";
                 break;
         }
+        
+        CityDistanceContainerDTO container = new CityDistanceContainerDTO();
         
         for (int i = 0; i < cities.size() - 1; i++) {
             cityI = cities.get(i);
@@ -54,10 +58,10 @@ public class CityService {
                                                 , nUnit);
                 distance = Math.floor(distance);
                 
-                distances.add(new CityDistanceDTO(cityI.getName(), cityJ.getName(), distance, unit));
+                container.add(cityI.getName(), cityJ.getName(), distance, unit);
             }
         }
         
-        return distances;
+        return container;
     }
 }
